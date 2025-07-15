@@ -1,0 +1,45 @@
+body {
+  background-color: #d5eaff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-container {
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 20px rgba(0, 94, 255, 0.15);
+}
+
+.input-outline {
+  border: 2px solid #6a8fff;
+  background-color: white;
+  color: #003;
+}
+
+.input-outline:focus {
+  border-color: #305eff;
+  box-shadow: 0 0 5px #8ab6ff;
+}
+
+label {
+  color: #4a6eff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sticky footer with no changes needed in HTML */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
