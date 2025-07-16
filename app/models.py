@@ -17,3 +17,11 @@ class SimulationRequest(BaseModel):
 class SimulationResult(BaseModel):
     score: int
     breakdown: Dict[str, int]
+    
+class UserProfile(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+    age: int
+    employment_status: str
+    profile: FinancialProfile
