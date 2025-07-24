@@ -6,6 +6,11 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.profile-container {
+  background-color: rgba(248, 249, 250, 0.70);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
 
 .input-outline {
   border: 2px solid #6a8fff;
@@ -25,14 +30,26 @@ label {
   text-transform: uppercase;
 }
 
+.main-title {
+  color: #0047ab;
+  font-weight: bold;
+}
 
 .btn-custom {
+  padding: 6px 20px;
+  font-size: 0.9rem;
   background-color: #eb7878;
   color: white;
+  border: none;
+  border-radius: 20px;
 }
 
 .btn-custom:hover {
   background-color: #c54949;
+}
+
+.small-note {
+  font-size: 0.85rem;
 }
 
 html, body {
@@ -49,8 +66,4 @@ main {
 
 footer {
   flex-shrink: 0;
-}
-
-.small-note {
-  font-size: 0.85rem;
 }

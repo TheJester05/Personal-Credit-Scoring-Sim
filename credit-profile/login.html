@@ -22,23 +22,23 @@
     </div>
   </nav>
 
-  <h1 class="text-center fw-bold mt-4 mb-3">Welcome to C-URCredit</h1>
-
   <main class="d-flex justify-content-center mt-3">
-    <div class="col-md-6 p-5 rounded-4 profile-container">
+    <div class="col-md-5 p-5 rounded-3 profile-container">
       <h2 class="text-primary mb-3">LOGIN</h2>
       <form onsubmit="event.preventDefault(); login();">
         <div class="mb-3">
-          <label for="loginEmail" class="form-label">Email</label>
           <input id="loginEmail" class="form-control input-outline" type="email" placeholder="Enter email" required>
         </div>
         <div class="mb-2">
-          <label for="loginPassword" class="form-label">Password</label>
           <input id="loginPassword" class="form-control input-outline" type="password" placeholder="Enter password" required>
         </div>
-        
-        <p class="mb-3 text-primary small-note">Don't have an account? <a href="signup.html">Sign up here</a></p>
-        <div class="d-grid">
+
+        <p class="text-primary mt-1 mb-3">
+          <span class="small-note">Don't have an account?</span>
+          <a href="signup.html">Sign Up here</a>
+        </p>
+
+        <div class="d-flex justify-content-end">
           <button type="submit" class="btn-custom">Login</button>
         </div>
       </form>
@@ -67,7 +67,6 @@
       window.location.href = 'login.html';
     }
 
-    // Show/hide login/logout links based on session
     const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
     document.getElementById('loginLink').classList.toggle('d-none', isLoggedIn);
     document.getElementById('logoutLink').classList.toggle('d-none', !isLoggedIn);
