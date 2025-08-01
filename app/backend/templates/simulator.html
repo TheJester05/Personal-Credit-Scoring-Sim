@@ -88,26 +88,34 @@
       }
     });
 
-    function simulate(action) {
-      const effects = {
-        payOnTime: +20,
-        missPayment: -40,
-        openNewCard: -10,
-        closeOldAccount: -15,
-        reduceUtilization: +25
-      };
+   const userEmail = sessionStorage.getItem('email');
 
-      score += effects[action] || 0;
-      score = Math.min(Math.max(score, minScore), maxScore);
+async function simulate(action) {
+  const response = await fetch("/api/v1/simulate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: userEmail,
+      profile: {
+        payment_history: 90,
+        credit_utilization: 50,
+        length_of_history: 70,
+        credit_mix: 60,
+        inquiries: 20
+      },
+      actions: [action]
+    })
+  });
 
-      const displayedValue = score - minScore;
-      const remaining = maxScore - score;
+  const result = await response.json();
+  score = result.score;
 
-      scoreChart.data.datasets[0].data = [displayedValue, remaining];
-      scoreChart.update();
+  scoreChart.data.datasets[0].data = [score - minScore, maxScore - score];
+  scoreChart.update();
+  document.getElementById("scoreText").textContent = score;
+}
 
-      document.getElementById("scoreText").textContent = score;
-    }
+
   </script>
 </body>
 </html>

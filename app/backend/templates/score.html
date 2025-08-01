@@ -33,32 +33,44 @@
     ©C–URCREDIT 2025
   </footer>
 
-  <script>
-    const ctx = document.getElementById('scoreChart').getContext('2d');
-    new Chart(ctx, {
+ <script>
+  const userEmail = sessionStorage.getItem('email');
+
+  async function loadScore() {
+    const res = await fetch(`/api/v1/score/${userEmail}`);
+    const data = await res.json();
+
+    const values = [
+      data.breakdown.payment_history,
+      data.breakdown.credit_utilization,
+      data.breakdown.length_of_history,
+      data.breakdown.credit_mix,
+      data.breakdown.inquiries
+    ];
+
+    new Chart(document.getElementById('scoreChart').getContext('2d'), {
       type: 'bar',
       data: {
         labels: ['Payment History', 'Credit Utilization', 'Credit Age', 'Credit Mix', 'Inquiries'],
         datasets: [{
-          label: 'Contribution to Score (%)',
-          data: [35, 30, 15, 10, 10],
+          label: 'Score Breakdown',
+          data: values,
           backgroundColor: ['#4c8dff', '#7daeff', '#a8c9ff', '#c3dcff', '#d9e9ff'],
           borderRadius: 10
         }]
       },
       options: {
-        plugins: {
-          legend: { display: false }
-        },
+        plugins: { legend: { display: false } },
         scales: {
-          y: {
-            beginAtZero: true,
-            max: 40,
-            ticks: { stepSize: 10 }
-          }
+          y: { beginAtZero: true, max: 300 }
         }
       }
     });
-  </script>
+  }
+
+  loadScore();
+</script>
+
+
 </body>
 </html>
