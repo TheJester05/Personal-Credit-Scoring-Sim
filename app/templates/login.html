@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - C-URCredit</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-primary rounded-pill m-3 px-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <span class="navbar-brand text-white fw-bold fs-3">C–URCredit</span>
+      <div class="navbar-nav flex-row gap-4" id="navLinks">
+        <a class="nav-link text-white" href="index.html">HOME</a>
+        <a class="nav-link text-white" href="profile.html">MY PROFILE</a>
+        <a class="nav-link text-white" href="simulator.html">SIMULATOR</a>
+        <a class="nav-link text-white" href="score.html">SCORE</a>
+        <a class="nav-link text-white" href="tips.html">TIPS</a>
+        <a class="nav-link text-white" href="login.html" id="loginLink">LOGIN</a>
+        <a class="nav-link text-white d-none" href="#" onclick="logout()" id="logoutLink">LOG OUT</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="d-flex justify-content-center mt-5 pt-3">
+  <div class="login-box col-md-5 p-4 rounded-3 shadow">
+    <h2 class="text-primary mb-3">LOGIN</h2>
+    <form onsubmit="event.preventDefault(); login();">
+      <div class="mb-3">
+        <input id="loginEmail" class="form-control" type="email" placeholder="Enter email" required>
+      </div>
+      <div class="mb-2">
+        <input id="loginPassword" class="form-control" type="password" placeholder="Enter password" required>
+      </div>
+
+      <p class="text-primary mt-1 mb-3">
+        <span class="small-note">Don't have an account?</span>
+        <a href="signup.html">Sign Up here</a>
+      </p>
+
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+
+
+  <script>
+    function login() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      sessionStorage.setItem('email', email);
+
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+
+      if (storedUser && storedUser.email === email && storedUser.password === password) {
+        alert('Login successful!');
+        sessionStorage.setItem('loggedIn', 'true');
+        window.location.href = 'profile.html';
+      } else {
+        alert('Invalid email or password.');
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('loggedIn');
+      alert('Logged out successfully.');
+      window.location.href = 'login.html';
+    }
+
+    const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
+    document.getElementById('loginLink').classList.toggle('d-none', isLoggedIn);
+    document.getElementById('logoutLink').classList.toggle('d-none', !isLoggedIn);
+  </script>
+</body>
+</html>

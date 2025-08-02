@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from database import users_collection
 from auth import hash_password, verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from datetime import timedelta
-
 app = FastAPI()
 
 class UserCreate(BaseModel):

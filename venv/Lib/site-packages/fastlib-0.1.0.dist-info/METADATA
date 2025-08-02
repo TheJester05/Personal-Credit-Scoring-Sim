@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: fastlib
+Version: 0.1.0
+Summary: 
+Author: wanqiang.liu
+Author-email: wanqiang.liu@freetech.com
+Requires-Python: >=3.10,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: pandas (>=2.2.3,<3.0.0)
+Requires-Dist: pd (>=0.0.4,<0.0.5)
+Description-Content-Type: text/markdown
+
+
