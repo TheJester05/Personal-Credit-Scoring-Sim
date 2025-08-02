@@ -9,22 +9,22 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-primary rounded-pill m-3 px-4">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <span class="navbar-brand text-white fw-bold fs-3">C–URCredit</span>
-      <div class="navbar-nav flex-row gap-4">
-        <a class="nav-link text-white" href="/index.html">HOME</a>
-        <a class="nav-link text-white" href="/profile.html">MY PROFILE</a>
-        <a class="nav-link text-white" href="/simulator.html">SIMULATOR</a>
-        <a class="nav-link text-white" href="/score.html">SCORE</a>
-        <a class="nav-link text-white" href="/tips.html">TIPS</a>
-      </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-primary rounded-pill m-3 px-4">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <span class="navbar-brand text-white fw-bold fs-3">C–URCredit</span>
+    <div class="navbar-nav flex-row gap-4">
+      <a class="nav-link text-white" href="/index">HOME</a>
+      <a class="nav-link text-white" href="/profile">MY PROFILE</a>
+      <a class="nav-link text-white" href="/simulator">SIMULATOR</a>
+      <a class="nav-link text-white" href="/score">SCORE</a>
+      <a class="nav-link text-white" href="/tips">TIPS</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- Simulator Section -->
-   <main>
+<!-- Simulator Section -->
+<main>
   <div class="container bg-light rounded-4 p-5 text-center">
     <h2 class="text-primary-emphasis fw-bold mb-4">Simulate Financial Actions</h2>
 
@@ -32,7 +32,7 @@
     <div class="mb-5" style="max-width: 300px; margin: auto;">
       <canvas id="scoreRadial"></canvas>
       <div id="scoreText" style="position: relative; top: -160px; font-size: 2.5rem; font-weight: bold; color: #2c3e50;">
-        680
+        {{ sim_data.score }}
       </div>
     </div>
 
@@ -55,67 +55,84 @@
       </div>
     </div>
   </div>
-  </main>
+</main>
 
-  <!-- Footer -->
-  <footer class="text-center bg-primary text-white py-2 mt-5">
-    ©C–URCREDIT 2025
-  </footer>
+<!-- Footer -->
+<footer class="text-center bg-primary text-white py-2 mt-5">
+  ©C–URCREDIT 2025
+</footer>
 
-  <!-- JavaScript Logic -->
-  <script>
-    let score = 680;
-    const maxScore = 850;
-    const minScore = 300;
+<!-- JSON Data Block -->
+<script type="application/json" id="simData">
+  {{ sim_data | tojson }}
+</script>
 
-    const ctx = document.getElementById('scoreRadial').getContext('2d');
-    const scoreChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        datasets: [{
-          data: [score - minScore, maxScore - score],
-          backgroundColor: ['#4c8dff', '#e0e0e0'],
-          cutout: '80%',
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: false }
-        }
+<!-- JavaScript Logic -->
+<script>
+  const simData = JSON.parse(document.getElementById("simData").textContent);
+  let score = simData.score;
+  const userEmail = simData.email;
+  let userProfile = simData.profile || {};
+
+  if (!userProfile || Object.keys(userProfile).length === 0) {
+    userProfile = {
+      payment_history: 0,
+      credit_utilization: 0,
+      length_of_history: 0,
+      credit_mix: 0,
+      inquiries: 0
+    };
+  }
+
+  const maxScore = 850; 
+  const minScore = 300;  
+
+  const ctx = document.getElementById('scoreRadial').getContext('2d');
+  const scoreChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [score - minScore, maxScore - score],
+        backgroundColor: ['#4c8dff', '#e0e0e0'],
+        cutout: '80%',
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false }
       }
-    });
-
-   const userEmail = sessionStorage.getItem('email');
-
-async function simulate(action) {
-  const response = await fetch("/api/v1/simulate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: userEmail,
-      profile: {
-        payment_history: 90,
-        credit_utilization: 50,
-        length_of_history: 70,
-        credit_mix: 60,
-        inquiries: 20
-      },
-      actions: [action]
-    })
+    }
   });
 
-  const result = await response.json();
-  score = result.score;
-
-  scoreChart.data.datasets[0].data = [score - minScore, maxScore - score];
-  scoreChart.update();
   document.getElementById("scoreText").textContent = score;
-}
 
+  async function simulate(action) {
+    const response = await fetch("/api/v1/simulate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: userEmail,
+        profile: userProfile,
+        actions: [action]
+      })
+    });
 
-  </script>
+    const result = await response.json();
+    score = result.score;
+
+    scoreChart.data.datasets[0].data = [score - minScore, maxScore - score];
+    scoreChart.update();
+
+    document.getElementById("scoreText").textContent = score;
+
+    if (result.updated_profile) {
+      userProfile = result.updated_profile;
+    }
+  }
+</script>
+
 </body>
 </html>

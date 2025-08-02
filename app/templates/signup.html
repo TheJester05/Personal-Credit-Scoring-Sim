@@ -1,4 +1,3 @@
-<!-- Sign Up Page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,13 +11,13 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <span class="navbar-brand text-white fw-bold fs-3">C–URCredit</span>
       <div class="navbar-nav flex-row gap-4" id="navLinks">
-        <a class="nav-link text-white" href="index.html">HOME</a>
-        <a class="nav-link text-white" href="profile.html">MY PROFILE</a>
-        <a class="nav-link text-white" href="simulator.html">SIMULATOR</a>
-        <a class="nav-link text-white" href="score.html">SCORE</a>
-        <a class="nav-link text-white" href="tips.html">TIPS</a>
-        <a class="nav-link text-white" href="login.html" id="loginLink">LOGIN</a>
-        <a class="nav-link text-white d-none" href="#" onclick="logout()" id="logoutLink">LOG OUT</a>
+        <a class="nav-link text-white" href="/index">HOME</a>
+        <a class="nav-link text-white" href="/profile">MY PROFILE</a>
+        <a class="nav-link text-white" href="/simulator">SIMULATOR</a>
+        <a class="nav-link text-white" href="/score">SCORE</a>
+        <a class="nav-link text-white" href="/tips">TIPS</a>
+        <a class="nav-link text-white" href="/login" id="loginLink">LOGIN</a>
+        <a class="nav-link text-white d-none" href="/logout" id="logoutLink">LOG OUT</a>
       </div>
     </div>
   </nav>
@@ -27,7 +26,9 @@
     <div class="col-md-5 p-5 rounded-3 profile-container">
       <h2 class="text-primary mb-4">SIGN UP</h2>
       <p class="text-uppercase text-primary fw-bold small mb-4" style="font-size: 0.70rem;">It’s quick and easy!</p>
-      <form onsubmit="event.preventDefault(); signup();">
+
+      <!-- ✅ ACTUAL FORM TO FASTAPI -->
+      <form method="POST" action="/signup">
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <input type="text" class="form-control input-outline" placeholder="First Name" required>
@@ -37,48 +38,41 @@
           </div>
         </div>
         <div class="mb-3">
-          <input type="email" id="signupEmail" class="form-control input-outline" placeholder="Email" required>
+          <input type="email" name="email" id="signupEmail" class="form-control input-outline" placeholder="Email" required>
         </div>
         <div class="mb-3">
           <input type="date" class="form-control input-outline" placeholder="Birth Date" required>
         </div>
         <div class="mb-2">
-          <input type="password" id="signupPassword" class="form-control input-outline" placeholder="New Password" required>
+          <input type="password" name="password" id="signupPassword" class="form-control input-outline" placeholder="New Password" required>
         </div>
+
         <p class="text-primary mt-1 mb-3">
           <span class="small-note">Already have an account?</span>
-          <a href="login.html">Login here</a>
+          <a href="/login">Login here</a>
         </p>
         <div class="d-flex justify-content-end">
-          <button type="submit" class="btn-custom">Sign Up</button>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
         </div>
       </form>
     </div>
   </main>
 
   <script>
-    function signup() {
-      const email = document.getElementById('signupEmail').value;
-      const password = document.getElementById('signupPassword').value;
-
-      if (email && password) {
-        localStorage.setItem('user', JSON.stringify({ email, password }));
-        alert('Account created! Please log in.');
-        window.location.href = 'login.html';
-      } else {
-        alert('Please fill in all fields.');
-      }
-    }
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("/profile", { credentials: "include" }).then(res => {
+        const loggedIn = res.status !== 401;
+        document.getElementById("loginLink").classList.toggle("d-none", loggedIn);
+        document.getElementById("logoutLink").classList.toggle("d-none", !loggedIn);
+      });
+    });
 
     function logout() {
-      sessionStorage.removeItem('loggedIn');
-      alert('Logged out successfully.');
-      window.location.href = 'login.html';
+      fetch("/logout").then(() => {
+        alert("Logged out successfully.");
+        window.location.href = "/login";
+      });
     }
-
-    const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
-    document.getElementById('loginLink').classList.toggle('d-none', isLoggedIn);
-    document.getElementById('logoutLink').classList.toggle('d-none', !isLoggedIn);
   </script>
 </body>
 </html>
